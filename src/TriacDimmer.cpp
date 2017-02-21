@@ -1,5 +1,5 @@
 #include "TriacDimmer.h"
-
+#include <Arduino.h>
 
 void TriacDimmer::begin(){
 	TCCR1A = 0;

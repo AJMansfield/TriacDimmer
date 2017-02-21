@@ -12,6 +12,11 @@ namespace TriacDimmer {
 
 	namespace detail {
 
+		const float interpolate(const float x,
+			const float x_table[],
+			const float y_table[],
+			uint8_t table_length);
+
 		const uint16_t pulse_length = 20;
 		volatile uint16_t ch_A_up;
 		volatile uint16_t ch_A_dn;
@@ -36,11 +41,6 @@ namespace TriacDimmer {
 		  0.80645161,  0.83870968,  0.87096774,  0.90322581,  0.93548387,
 		  0.96774194,  1.        };
 		const uint8_t lut_length = sizeof(phase_lut) / sizeof(float);
-
-		const float interpolate(const float x,
-			const float x_table[],
-			const float y_table[],
-			uint8_t table_length);
 	}
 };
 
