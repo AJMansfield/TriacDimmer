@@ -6,8 +6,8 @@
 
 namespace TriacDimmer {
 	void begin();
-	void setBrightness(uint8_t pin, float value);
-	float getCurrentBrightness(uint8_t pin);
+	// void setBrightness(uint8_t pin, float value);
+	// float getCurrentBrightness(uint8_t pin);
 	void end();
 
 	namespace detail {
