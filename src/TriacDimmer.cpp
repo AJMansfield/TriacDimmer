@@ -91,7 +91,7 @@ ISR(TIMER1_CAPT_vect){
 		"nop	; pad for timing\n\t"\
 		"std Z+1,%B[tmpB]	; store TCNT1H\n\t"\
 		"st Z,%A[tmpB]	; store TCNT1L\n\t"\
-	: [tmpA] "=&r" (tmpA), [tmpB] "=&r" (tmpB) );
+	: [tmpA] "=&w" (tmpA), [tmpB] "=&w" (tmpB) );
 }
 ISR(TIMER1_COMPA_vect){
 	TCCR1A &=~ _BV(COM1A1);
