@@ -1,7 +1,8 @@
+#ifndef Morse_h
+#define Morse_h
+
 #include <Arduino.h>
 #include <avr/pgmspace.h>
-
-
 
 namespace TriacDimmer {
 	void begin();
@@ -46,3 +47,5 @@ namespace TriacDimmer {
 ISR(TIMER1_CAPT_vect);
 ISR(TIMER1_COMPA_vect);
 ISR(TIMER1_COMPB_vect);
+
+#endif
