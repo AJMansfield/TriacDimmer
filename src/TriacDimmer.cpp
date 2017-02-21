@@ -78,6 +78,7 @@ ISR(TIMER1_CAPT_vect){
 	// note, this is equivalent to `TCNT1 = TCNT1 - ICR1 + 1;`, 
 	// but written in assembly to make sure the timing is corrent
 	// the "ld r24,Z" and "st Z,r24" must be exactly 8 instructions apart
+	#if defined(__AVR_ATmega328P__)
 	register uint16_t tmpA;
 	register uint16_t tmpB;
 	asm volatile (
@@ -92,6 +93,10 @@ ISR(TIMER1_CAPT_vect){
 		"std Z+1,%B[tmpB]	; store TCNT1H\n\t"\
 		"st Z,%A[tmpB]	; store TCNT1L\n\t"\
 	: [tmpA] "=&w" (tmpA), [tmpB] "=&w" (tmpB) );
+	#elif 
+		TCNT1 = TCNT1 - ICR1 + 1; //fallback in case using some other platform.
+		//not as good- timing may be slightly off, but should still work for 90% of what you'd want
+	#endif
 }
 ISR(TIMER1_COMPA_vect){
 	TCCR1A &=~ _BV(COM1A1);
