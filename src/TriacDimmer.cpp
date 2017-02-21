@@ -93,7 +93,7 @@ ISR(TIMER1_CAPT_vect){
 		"std Z+1,%B[tmpB]	; store TCNT1H\n\t"\
 		"st Z,%A[tmpB]	; store TCNT1L\n\t"\
 	: [tmpA] "=&w" (tmpA), [tmpB] "=&w" (tmpB) );
-	#elif 
+	#else
 		TCNT1 = TCNT1 - ICR1 + 1; //fallback in case using some other platform.
 		//not as good- timing may be slightly off, but should still work for 90% of what you'd want
 	#endif
