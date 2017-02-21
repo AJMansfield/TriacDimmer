@@ -1,5 +1,5 @@
-#ifndef Morse_h
-#define Morse_h
+#ifndef TriacDimmer_h
+#define TriacDimmer_h
 
 #include <Arduino.h>
 #include <avr/pgmspace.h>
