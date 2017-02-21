@@ -78,16 +78,15 @@ ISR(TIMER1_CAPT_vect){
 	register uint16_t tmpA;
 	register uint16_t tmpB;
 	asm volatile (
-		"lds %A[tmpA],134	; load ICR1L\n\t"\
-		"lds %B[tmpA],134+1	; load ICR1H\n\t"\
-		"lds %A[tmpB],132	; load TCNT1L\n\t"\
-		"lds %B[tmpB],132+1	; load TCNT1H\n\t"\
-		"adiw %A[tmpB],1	; add 1\n\t"\
-		"sub %A[tmpB],%A[tmpA]	; subtract ICR1L\n\t"\
-		"sbc %B[tmpB],%B[tmpA]	; subtract ICR1H\n\t"\
-		"nop		; pad for timing\n\t"\
-		"sts 132+1,%B[tmpB]	; store TCNT1H\n\t"\
-		"sts 132,%A[tmpB]	; store TCNT1L\n\t"\
+		"lds %A[tmpB],132	; 2 load TCNT1L\n\t"\
+		"lds %B[tmpB],132+1	; 2 load TCNT1H\n\t"\
+		"lds %A[tmpA],134	; 2 load ICR1L\n\t"\
+		"lds %B[tmpA],134+1	; 2 load ICR1H\n\t"\
+		"adiw %A[tmpB],2	; 2 add 2\n\t"\
+		"sub %A[tmpB],%A[tmpA]	; 1 subtract ICR1L\n\t"\
+		"sbc %B[tmpB],%B[tmpA]	; 1 subtract ICR1H\n\t"\
+		"sts 132+1,%B[tmpB]	; 2 store TCNT1H\n\t"\
+		"sts 132,%A[tmpB]	; 2 store TCNT1L\n\t"\
 	: [tmpA] "=&w" (tmpA), [tmpB] "=&w" (tmpB) );
 	#else
 		TCNT1 = TCNT1 - ICR1 + 1; //fallback in case using some other platform, although not as good
