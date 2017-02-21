@@ -18,10 +18,10 @@ namespace TriacDimmer {
 		// 	uint8_t table_length);
 
 		const uint16_t pulse_length = 20;
-		volatile uint16_t ch_A_up;
-		volatile uint16_t ch_A_dn;
-		volatile uint16_t ch_B_up;
-		volatile uint16_t ch_B_dn;
+		extern volatile uint16_t ch_A_up;
+		extern volatile uint16_t ch_A_dn;
+		extern volatile uint16_t ch_B_up;
+		extern volatile uint16_t ch_B_dn;
 
 		const PROGMEM float phase_lut[] = 
 		{ -0.            ,   9.25295293e-08,   2.52559560e-05,   9.66419104e-04,

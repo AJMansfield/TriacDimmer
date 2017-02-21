@@ -1,6 +1,12 @@
 #include "TriacDimmer.h"
 #include <Arduino.h>
 
+
+volatile uint16_t TriacDimmer::detail::ch_A_up;
+volatile uint16_t TriacDimmer::detail::ch_A_dn;
+volatile uint16_t TriacDimmer::detail::ch_B_up;
+volatile uint16_t TriacDimmer::detail::ch_B_dn;
+
 void TriacDimmer::begin(){
 	TCCR1A = 0;
 	TCCR1B = _BV(ICNC1) | _BV(ICES1) | _BV(CS11);
