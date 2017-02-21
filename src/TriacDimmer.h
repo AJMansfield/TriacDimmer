@@ -12,10 +12,10 @@ namespace TriacDimmer {
 
 	namespace detail {
 
-		const float interpolate(const float x,
-			const float x_table[],
-			const float y_table[],
-			uint8_t table_length);
+		// const float interpolate(const float x,
+		// 	const float x_table[],
+		// 	const float y_table[],
+		// 	uint8_t table_length);
 
 		const uint16_t pulse_length = 20;
 		volatile uint16_t ch_A_up;

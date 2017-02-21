@@ -9,18 +9,20 @@ void TriacDimmer::begin(){
 
 void TriacDimmer::setBrightness(uint8_t pin, float x){
 	if(pin == 9){
-		float y = 1 - TriacDimmer::detail::interpolate(x,
-			TriacDimmer::detail::brightness_lut,
-			TriacDimmer::detail::phase_lut,
-			TriacDimmer::detail::lut_length);
+		float y = x;
+		// TriacDimmer::detail::interpolate(x,
+		// 	TriacDimmer::detail::brightness_lut,
+		// 	TriacDimmer::detail::phase_lut,
+		// 	TriacDimmer::detail::lut_length);
 
 		TriacDimmer::detail::ch_A_up = (1-y) * ICR1;
 		TriacDimmer::detail::ch_A_dn = TriacDimmer::detail::ch_A_up + TriacDimmer::detail::pulse_length;
 	} else if(pin == 10){
-		float y = 1 - TriacDimmer::detail::interpolate(x,
-			TriacDimmer::detail::brightness_lut,
-			TriacDimmer::detail::phase_lut,
-			TriacDimmer::detail::lut_length);
+		float y = x;
+		// TriacDimmer::detail::interpolate(x,
+		// 	TriacDimmer::detail::brightness_lut,
+		// 	TriacDimmer::detail::phase_lut,
+		// 	TriacDimmer::detail::lut_length);
 
 		TriacDimmer::detail::ch_B_up = (1-y) * ICR1;
 		TriacDimmer::detail::ch_B_dn = TriacDimmer::detail::ch_B_up + TriacDimmer::detail::pulse_length;
@@ -30,16 +32,18 @@ void TriacDimmer::setBrightness(uint8_t pin, float x){
 float TriacDimmer::getCurrentBrightness(uint8_t pin){
 	if(pin == 9){
 		float y = 1 - (float) TriacDimmer::detail::ch_A_up / ICR1;
-		return TriacDimmer::detail::interpolate(y,
-			TriacDimmer::detail::phase_lut,
-			TriacDimmer::detail::brightness_lut,
-			TriacDimmer::detail::lut_length);
+		return y;
+		// TriacDimmer::detail::interpolate(y,
+		// 	TriacDimmer::detail::phase_lut,
+		// 	TriacDimmer::detail::brightness_lut,
+		// 	TriacDimmer::detail::lut_length);
 	} else if(pin == 10){
 		float y = 1 - (float) TriacDimmer::detail::ch_B_up / ICR1;
-		return TriacDimmer::detail::interpolate(y,
-			TriacDimmer::detail::phase_lut,
-			TriacDimmer::detail::brightness_lut,
-			TriacDimmer::detail::lut_length);
+		return y;
+		// TriacDimmer::detail::interpolate(y,
+		// 	TriacDimmer::detail::phase_lut,
+		// 	TriacDimmer::detail::brightness_lut,
+		// 	TriacDimmer::detail::lut_length);
 	}
 	return 0;
 }
@@ -50,14 +54,14 @@ void TriacDimmer::end(){
 	TIMSK1 = 0;
 }
 
-const float TriacDimmer::detail::interpolate(const float x, const float x_table[], const float y_table[], uint8_t size){
-	if (x <= x_table[0]) return y_table[0];
-	if (x >= x_table[size-1]) return y_table[size-1];
-	uint8_t pos = 1;
-	while(x > x_table[pos]) pos++;
-	if (x == x_table[pos]) return y_table[pos];
-	return (x - x_table[pos-1]) * (y_table[pos] - y_table[pos-1]) / (x_table[pos] - x_table[pos-1]) + y_table[pos-1];
-}
+// const float TriacDimmer::detail::interpolate(const float x, const float x_table[], const float y_table[], uint8_t size){
+// 	if (x <= x_table[0]) return y_table[0];
+// 	if (x >= x_table[size-1]) return y_table[size-1];
+// 	uint8_t pos = 1;
+// 	while(x > x_table[pos]) pos++;
+// 	if (x == x_table[pos]) return y_table[pos];
+// 	return (x - x_table[pos-1]) * (y_table[pos] - y_table[pos-1]) / (x_table[pos] - x_table[pos-1]) + y_table[pos-1];
+// }
 
 ISR(TIMER1_CAPT_vect){
 	OCR1A = TriacDimmer::detail::ch_A_up;
