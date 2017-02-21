@@ -1,5 +1,5 @@
-TriacDimmer KEYWORD1
-begin KEYWORD2
-end KEYWORD2
-getCurrentBrightness KEYWORD2
-setBrightness KEYWORD2
+TriacDimmer           KEYWORD1
+begin                 KEYWORD2
+end                   KEYWORD2
+getCurrentBrightness  KEYWORD2
+setBrightness         KEYWORD2
