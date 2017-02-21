@@ -80,14 +80,14 @@ ISR(TIMER1_CAPT_vect){
 	asm volatile (
 		"lds %A[tmpA],134	; load ICR1L\n\t"\
 		"lds %B[tmpA],134+1	; load ICR1H\n\t"\
-		"ld %A[tmpB],132	; load TCNT1L\n\t"\
-		"ldd %B[tmpB],132+1	; load TCNT1H\n\t"\
+		"lds %A[tmpB],132	; load TCNT1L\n\t"\
+		"lds %B[tmpB],132+1	; load TCNT1H\n\t"\
 		"adiw %A[tmpB],1	; add 1\n\t"\
 		"sub %A[tmpB],%A[tmpA]	; subtract ICR1L\n\t"\
 		"sbc %B[tmpB],%B[tmpA]	; subtract ICR1H\n\t"\
 		"nop		; pad for timing\n\t"\
-		"std 132+1,%B[tmpB]	; store TCNT1H\n\t"\
-		"st 132,%A[tmpB]	; store TCNT1L\n\t"\
+		"sts 132+1,%B[tmpB]	; store TCNT1H\n\t"\
+		"sts 132,%A[tmpB]	; store TCNT1L\n\t"\
 	: [tmpA] "=&r" (tmpA), [tmpB] "=&r" (tmpB) );
 	#else
 		TCNT1 = TCNT1 - ICR1 + 1; //fallback in case using some other platform, although not as good
