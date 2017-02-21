@@ -55,19 +55,19 @@ float TriacDimmer::getCurrentBrightness(uint8_t pin){
 }
 
 void TriacDimmer::end(){
+	TIMSK1 = 0;
 	TCCR1A = 0;
 	TCCR1B = 0;
-	TIMSK1 = 0;
 }
 
-// const float TriacDimmer::detail::interpolate(const float x, const float x_table[], const float y_table[], uint8_t size){
-// 	if (x <= x_table[0]) return y_table[0];
-// 	if (x >= x_table[size-1]) return y_table[size-1];
-// 	uint8_t pos = 1;
-// 	while(x > x_table[pos]) pos++;
-// 	if (x == x_table[pos]) return y_table[pos];
-// 	return (x - x_table[pos-1]) * (y_table[pos] - y_table[pos-1]) / (x_table[pos] - x_table[pos-1]) + y_table[pos-1];
-// }
+const float TriacDimmer::detail::interpolate(const float x, const float x_table[], const float y_table[], uint8_t size){
+	if (x <= x_table[0]) return y_table[0];
+	if (x >= x_table[size-1]) return y_table[size-1];
+	uint8_t pos = 1;
+	while(x > x_table[pos]) pos++;
+	if (x == x_table[pos]) return y_table[pos];
+	return (x - x_table[pos-1]) * (y_table[pos] - y_table[pos-1]) / (x_table[pos] - x_table[pos-1]) + y_table[pos-1];
+}
 
 ISR(TIMER1_CAPT_vect){
 	OCR1A = TriacDimmer::detail::ch_A_up;
