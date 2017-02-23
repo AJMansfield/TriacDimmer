@@ -39,18 +39,15 @@ namespace TriacDimmer {
 	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
 	 */
 	void setBrightness(uint8_t pin, float value);
-	// template<uint8_t pin>
-	// void setBrightness(pin, float value);
 
 
 	/**
-	*	@brief	Gets the currently-set brightness.
-	*	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
-	*	This method retrieves the brightness for the channel controlled by the indicated pin.
+	 *	@brief	Gets the currently-set brightness.
+	 *	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
+	 *	This method retrieves the brightness for the channel controlled by the indicated pin.
 	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
-	*/	
+	 */
 	float getCurrentBrightness(uint8_t pin);
-	//float getCurrentBrightness(const uint8_t pin);
 
 
 	/**

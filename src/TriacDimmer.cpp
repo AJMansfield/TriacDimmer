@@ -4,10 +4,10 @@
 
 volatile uint16_t TriacDimmer::detail::pulse_length;
 volatile uint16_t TriacDimmer::detail::period = 16667;
-volatile uint16_t TriacDimmer::detail::ch_A_up = 12000;
-volatile uint16_t TriacDimmer::detail::ch_A_dn = 12020;
-volatile uint16_t TriacDimmer::detail::ch_B_up = 10000;
-volatile uint16_t TriacDimmer::detail::ch_B_dn = 10020;
+volatile uint16_t TriacDimmer::detail::ch_A_up;
+volatile uint16_t TriacDimmer::detail::ch_A_dn;
+volatile uint16_t TriacDimmer::detail::ch_B_up;
+volatile uint16_t TriacDimmer::detail::ch_B_dn;
 
 void TriacDimmer::begin(uint16_t pulse_length){
 	TriacDimmer::detail::pulse_length = pulse_length;
@@ -41,15 +41,6 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 		TriacDimmer::detail::setChannelB(1 - value);
 	}
 }
-// void TriacDimmer::setBrightness(const uint8_t pin, float value){
-// 	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
-
-// 	if (pin & 0x01 == 0x01){ // if (pin == 9){
-// 		TriacDimmer::detail::setChannelA(1 - value);
-// 	} else { // if (pin == 10){
-// 		TriacDimmer::detail::setChannelB(1 - value);
-// 	}
-// }
 
 void TriacDimmer::getCurrentBrightness(uint8_t pin){
 	assert(pin == 9 || pin == 10);
@@ -60,15 +51,6 @@ void TriacDimmer::getCurrentBrightness(uint8_t pin){
 		1 - TriacDimmer::detail::getChannelB();
 	}
 }
-// void TriacDimmer::getCurrentBrightness(const uint8_t pin){
-// 	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
-
-// 	if (pin & 0x01 == 0x01){ // if (pin == 9){
-// 		1 - TriacDimmer::detail::getChannelA();
-// 	} else { // if (pin == 10){
-// 		1 - TriacDimmer::detail::getChannelB();
-// 	}
-// }
 
 void TriacDimmer::detail::setChannelA(float value){
 	TriacDimmer::detail::ch_A_up = TriacDimmer::detail::period * value;
