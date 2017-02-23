@@ -9,11 +9,17 @@ volatile uint16_t TriacDimmer::detail::ch_B_up = 10000;
 volatile uint16_t TriacDimmer::detail::ch_B_dn = 10020;
 
 void TriacDimmer::begin(uint16_t pulse_length){
-	TriacDimmer::detail::pulse_length = pulse_length * 2;
+	TriacDimmer::detail::pulse_length = pulse_length;
+
 	TCCR1A = 0;
 	TCCR1B = _BV(ICNC1)  //input capture noise cancel
 			| _BV(ICES1) //positive edge
 			| _BV(CS11); // /8 prescaler
+
+	pinMode(8, INPUT);
+	pinMode(9, OUTPUT);
+	pinMode(10, OUTPUT);
+
 	TIFR1 = _BV(ICF1); //clear IC interrupt flag
 	TIMSK1 = _BV(ICIE1); //enable input capture interrupt
 }

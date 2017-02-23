@@ -20,7 +20,7 @@ namespace TriacDimmer {
 
 	/**
 	 *	@brief	Initializes the library.
-	 *	@param	pulse_length	How long the trigger pulses should be, in microseconds.
+	 *	@param	pulse_length	How long the trigger pulses should be, in half-microseconds.
 	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
 	 */
 	void begin(uint16_t pulse_length = 20);
