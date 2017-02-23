@@ -42,7 +42,7 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 	}
 }
 
-void TriacDimmer::getCurrentBrightness(uint8_t pin){
+float TriacDimmer::getCurrentBrightness(uint8_t pin){
 	assert(pin == 9 || pin == 10);
 	
 	if (pin & 0x01 == 0x01){ // if (pin == 9){
