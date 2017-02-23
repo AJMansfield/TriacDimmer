@@ -28,8 +28,8 @@ void TriacDimmer::end(){
 
 
 ISR(TIMER1_CAPT_vect){
-	TIMSK1 &=~ _BV(OCIE1A) | _BV(OCIE1B); //clear interrupts, in case they haven't run yet
-	TCCR1A &=~ _BV(COM1A1) | _BV(COM1B1);
+	TIMSK1 &=~ (_BV(OCIE1A) | _BV(OCIE1B)); //clear interrupts, in case they haven't run yet
+	TCCR1A &=~ (_BV(COM1A1) | _BV(COM1B1));
 	TCCR1C = _BV(FOC1A) | _BV(FOC1B); //ensure outputs are properly cleared
 
 	OCR1A = ICR1 + TriacDimmer::detail::ch_A_up;
@@ -48,7 +48,7 @@ ISR(TIMER1_CAPT_vect){
 
 ISR(TIMER1_COMPA_vect){
 	TIMSK1 &=~ _BV(OCIE1A); //disable match interrupt
-	TCCR1A &=~ _BV(COM1A1); //clear OC1x on compare match
+	TCCR1A |= _BV(COM1A1); //clear OC1x on compare match
 
 	OCR1A = ICR1 + TriacDimmer::detail::ch_A_dn;
 
@@ -60,11 +60,11 @@ ISR(TIMER1_COMPA_vect){
 
 ISR(TIMER1_COMPB_vect){
 	TIMSK1 &=~ _BV(OCIE1B); //disable match interrupt
-	TCCR1A &=~ _BV(COM1B1); //clear OC1x on compare match
+	TCCR1A |= _BV(COM1B1); //clear OC1x on compare match
 
 	OCR1B = ICR1 + TriacDimmer::detail::ch_B_dn;
 
-	if((signed)(TCNT1 - OCR1B) < 0x7FFF){ 
+	if((signed)(TCNT1 - OCR1B) >= 0){ 
 		TCCR1C = _BV(FOC1B); //interrupt ran late, trigger match manually
 	}
 }
