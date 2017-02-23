@@ -39,7 +39,7 @@ namespace TriacDimmer {
 	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
 	 */
 	void setBrightness(uint8_t pin, float value);
-	void setBrightness(constexpr uint8_t pin, float value);
+	void setBrightness(const uint8_t pin, float value);
 
 
 	/**
@@ -49,7 +49,7 @@ namespace TriacDimmer {
 	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
 	*/	
 	float getCurrentBrightness(uint8_t pin);
-	float getCurrentBrightness(constexpr uint8_t pin);
+	float getCurrentBrightness(const uint8_t pin);
 
 
 	/**

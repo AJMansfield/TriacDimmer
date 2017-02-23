@@ -41,7 +41,7 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 		TriacDimmer::detail::setChannelB(1 - value);
 	}
 }
-void TriacDimmer::setBrightness(constexpr uint8_t pin, float value){
+void TriacDimmer::setBrightness(const uint8_t pin, float value){
 	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
 
 	if (pin & 0x01 == 0x01){ // if (pin == 9){
@@ -60,7 +60,7 @@ void TriacDimmer::getCurrentBrightness(uint8_t pin){
 		1 - TriacDimmer::detail::getChannelB();
 	}
 }
-void TriacDimmer::getCurrentBrightness(constexpr uint8_t pin){
+void TriacDimmer::getCurrentBrightness(const uint8_t pin){
 	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
 
 	if (pin & 0x01 == 0x01){ // if (pin == 9){
