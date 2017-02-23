@@ -1,5 +1,6 @@
 #include "TriacDimmer.h"
 #include <Arduino.h>
+#include <assert.h>
 
 volatile uint16_t TriacDimmer::detail::pulse_length;
 volatile uint16_t TriacDimmer::detail::period = 16667;
@@ -24,12 +25,65 @@ void TriacDimmer::begin(uint16_t pulse_length){
 	TIMSK1 = _BV(ICIE1); //enable input capture interrupt
 }
 
-
 void TriacDimmer::end(){
 	TIMSK1 = 0; //disable the interrupts first!
 	TIFR1 = 0xFF; //clear all flags
 	TCCR1A = 0; //clear to reset state
 	TCCR1B = 0;
+}
+
+void TriacDimmer::setBrightness(uint8_t pin, float value){
+	assert(pin == 9 || pin == 10);
+
+	if (pin & 0x01 == 0x01){ // if (pin == 9){
+		TriacDimmer::detail::setChannelA(1 - value);
+	} else { // if (pin == 10){
+		TriacDimmer::detail::setChannelB(1 - value);
+	}
+}
+void TriacDimmer::setBrightness(constexpr uint8_t pin, float value){
+	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
+
+	if (pin & 0x01 == 0x01){ // if (pin == 9){
+		TriacDimmer::detail::setChannelA(1 - value);
+	} else { // if (pin == 10){
+		TriacDimmer::detail::setChannelB(1 - value);
+	}
+}
+
+void TriacDimmer::getCurrentBrightness(uint8_t pin){
+	assert(pin == 9 || pin == 10);
+	
+	if (pin & 0x01 == 0x01){ // if (pin == 9){
+		1 - TriacDimmer::detail::getChannelA();
+	} else { // if (pin == 10){
+		1 - TriacDimmer::detail::getChannelB();
+	}
+}
+void TriacDimmer::getCurrentBrightness(constexpr uint8_t pin){
+	static_assert(pin == 9 || pin == 10, "TriacDimmer can only output on pins 9 or 10.");
+
+	if (pin & 0x01 == 0x01){ // if (pin == 9){
+		1 - TriacDimmer::detail::getChannelA();
+	} else { // if (pin == 10){
+		1 - TriacDimmer::detail::getChannelB();
+	}
+}
+
+void TriacDimmer::detail::setChannelA(float value){
+	TriacDimmer::detail::ch_A_up = TriacDimmer::detail::period * value;
+	TriacDimmer::detail::ch_A_dn = TriacDimmer::detail::ch_A_up + TriacDimmer::detail::pulse_length;
+}
+
+void TriacDimmer::detail::setChannelB(float value){
+	TriacDimmer::detail::ch_B_up = TriacDimmer::detail::period * value;
+	TriacDimmer::detail::ch_B_dn = TriacDimmer::detail::ch_B_up + TriacDimmer::detail::pulse_length;
+}
+float TriacDimmer::detail::getChannelA(){
+	return (float)TriacDimmer::detail::ch_A_up / TriacDimmer::detail::period;
+}
+float TriacDimmer::detail::getChannelB(){
+	return (float)TriacDimmer::detail::ch_B_up / TriacDimmer::detail::period;
 }
 
 
