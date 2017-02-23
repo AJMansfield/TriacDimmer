@@ -1,15 +1,15 @@
 #include "TriacDimmer.h"
 #include <Arduino.h>
 
-
-volatile uint16_t TriacDimmer::detail::period;
-volatile uint16_t TriacDimmer::detail::ch_A_up;
-volatile uint16_t TriacDimmer::detail::ch_A_dn;
-volatile uint16_t TriacDimmer::detail::ch_B_up;
-volatile uint16_t TriacDimmer::detail::ch_B_dn;
+volatile uint16_t TriacDimmer::detail::pulse_length;
+volatile uint16_t TriacDimmer::detail::period = 16667;
+volatile uint16_t TriacDimmer::detail::ch_A_up = 12000;
+volatile uint16_t TriacDimmer::detail::ch_A_dn = 12020;
+volatile uint16_t TriacDimmer::detail::ch_B_up = 10000;
+volatile uint16_t TriacDimmer::detail::ch_B_dn = 10020;
 
 void TriacDimmer::begin(uint16_t pulse_length){
-	TriacDimmer::detail::pulse_length = pulse_length;
+	TriacDimmer::detail::pulse_length = pulse_length * 2;
 	TCCR1A = 0;
 	TCCR1B = _BV(ICNC1)  //input capture noise cancel
 			| _BV(ICES1) //positive edge

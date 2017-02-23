@@ -53,7 +53,7 @@ namespace TriacDimmer {
 		// float getChannelB();
 
 
-		uint16_t pulse_length;
+		extern volatile uint16_t pulse_length;
 		extern volatile uint16_t ch_A_up;
 		extern volatile uint16_t ch_A_dn;
 		extern volatile uint16_t ch_B_up;
