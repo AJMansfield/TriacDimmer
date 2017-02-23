@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 
+volatile uint16_t TriacDimmer::detail::period;
 volatile uint16_t TriacDimmer::detail::ch_A_up;
 volatile uint16_t TriacDimmer::detail::ch_A_dn;
 volatile uint16_t TriacDimmer::detail::ch_B_up;
