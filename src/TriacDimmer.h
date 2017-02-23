@@ -1,51 +1,87 @@
+/**
+ *	@file	TriacDimmer.h
+ *	@brief	Contains header information for the TriacDimmer library.
+ *	@author	Anson Mansfield
+ *	@date 	2017-02-23
+ */
+
 #ifndef TriacDimmer_h
 #define TriacDimmer_h
 
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 
+/**
+ *	@brief	Contains all the library functions.
+ *	This namespace contains the library's public API suitable for general use. 
+ *	Implementation details and more technical API functions are in TriacDimmer::detail.
+ */
 namespace TriacDimmer {
-	void begin();
-	// void setBrightness(uint8_t pin, float value);
-	// float getCurrentBrightness(uint8_t pin);
+
+	/**
+	 *	@brief	Initializes the library.
+	 *	@param	pulse_length	How long the trigger pulses should be, in microseconds.
+	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
+	 */
+	void begin(uint16_t pulse_length = 20);
+
+	/**
+	 *	@brief	Stops the library
+	 *	This method stops the library, disabling the interrupts and resetting the timer configuration.
+	 */
 	void end();
 
+	// /**
+	//  *	@brief	Sets the current brightness.
+	//  *	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
+	//  *	@param	value	The desired brightness, from 0.0 to 1.0.
+	//  *	This method sets the brightness for the channel controlled by the indicated pin.
+	//  */
+	// void setBrightness(uint8_t pin, float value);
+
+	// /**
+	//  *	@brief	Gets the currently-set brightness.
+	//  *	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
+	//  *	This method retrieves the brightness for the channel controlled by the indicated pin.
+	//  */	
+	// float getCurrentBrightness(uint8_t pin);
+
 	namespace detail {
+		// void setChannelA(float value);
+		// void setChannelB(float value);
+		// float getChannelA();
+		// float getChannelB();
 
-		const float interpolate(const float x,
-			const float x_table[],
-			const float y_table[],
-			uint8_t table_length);
 
-		const uint16_t pulse_length = 20;
+		extern volatile uint16_t pulse_length;
 		extern volatile uint16_t ch_A_up;
 		extern volatile uint16_t ch_A_dn;
 		extern volatile uint16_t ch_B_up;
 		extern volatile uint16_t ch_B_dn;
+		extern volatile uint16_t period;
 
-		const PROGMEM float phase_lut[] = 
-		{ -0.            ,   9.25295293e-08,   2.52559560e-05,   9.66419104e-04,
-		   6.17766236e-03,   1.89552895e-02,   4.10991260e-02,   7.40639247e-02,
-		   1.15521833e-01,   1.64535545e-01,   2.20903015e-01,   2.80866796e-01,
-		   3.43594021e-01,   4.10268098e-01,   4.77649597e-01,   5.43711948e-01,
-		   6.07640486e-01,   6.68898386e-01,   7.26232887e-01,   7.78168688e-01,
-		   8.24150458e-01,   8.64133390e-01,   8.98217770e-01,   9.26632476e-01,
-		   9.49644260e-01,   9.67583008e-01,   9.80871218e-01,   9.90041286e-01,
-		   9.95740338e-01,   9.98723761e-01,   9.99838777e-01,   1.00000000e+00};
-		const PROGMEM float  brightness_lut[] =
-		{ 0.        ,  0.03225806,  0.06451613,  0.09677419,  0.12903226,
-		  0.16129032,  0.19354839,  0.22580645,  0.25806452,  0.29032258,
-		  0.32258065,  0.35483871,  0.38709677,  0.41935484,  0.4516129 ,
-		  0.48387097,  0.51612903,  0.5483871 ,  0.58064516,  0.61290323,
-		  0.64516129,  0.67741935,  0.70967742,  0.74193548,  0.77419355,
-		  0.80645161,  0.83870968,  0.87096774,  0.90322581,  0.93548387,
-		  0.96774194,  1.        };
-		const uint8_t lut_length = sizeof(phase_lut) / sizeof(float);
 	}
 };
 
+/* @breif This interrupt sets the output pulses to start at the appropriate time.
+ * 
+ * This interrupt sets the output pulses to begin at the appropriate time, sets up the
+ * interrupts that will configure the pulse end, and computes the time since the last pulse.
+ */
 ISR(TIMER1_CAPT_vect);
+
+/* @breif This interrupt sets the output A pulse to end at the appropriate time.
+ * 
+ * This interrupt sets the output A pulse to end at the appropriate time, and manually triggers the
+ * end in case the interrupt ran late.
+ */
 ISR(TIMER1_COMPA_vect);
+
+/* @breif This interrupt sets the output B pulse to end at the appropriate time.
+ * 
+ * This interrupt sets the output B pulse to end at the appropriate time, and manually triggers the
+ * end in case the interrupt ran late.
+ */
 ISR(TIMER1_COMPB_vect);
 
 #endif
