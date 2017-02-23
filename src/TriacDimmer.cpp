@@ -8,7 +8,7 @@ volatile uint16_t TriacDimmer::detail::ch_A_dn;
 volatile uint16_t TriacDimmer::detail::ch_B_up;
 volatile uint16_t TriacDimmer::detail::ch_B_dn;
 
-void TriacDimmer::begin(uint16_t pulse_length){]
+void TriacDimmer::begin(uint16_t pulse_length){
 	TriacDimmer::detail::pulse_length = pulse_length;
 	TCCR1A = 0;
 	TCCR1B = _BV(ICNC1)  //input capture noise cancel
