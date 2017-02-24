@@ -9,6 +9,10 @@
       http://a.co/iy2r6Gq
       http://a.co/30mKbq8
 
+  While this sketch is meant to be used with a dual-channel dimmer,
+  it can also control just a single channel (just leave the second
+  channel disconnected).
+  
   Note that the circuit here uses high-voltage mains AC power - make
   sure you understand the risks and take appropriate precautions.
 
@@ -19,8 +23,6 @@
   * The dimmer power input is connected to mains AC power.
   * The dimmer channel 1 and channel 2 outputs are connected 
       to lightbulbs or other devices.
-
-  
 
   Created 2017-02-23
   By Anson Mansfield

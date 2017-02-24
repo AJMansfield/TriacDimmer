@@ -9,7 +9,7 @@
 #define TriacDimmer_h
 
 #include <Arduino.h>
-#include <avr/pgmspace.h>
+
 
 /**
  *	@brief	Contains all the library functions.
