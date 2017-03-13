@@ -35,7 +35,7 @@ void TriacDimmer::end(){
 void TriacDimmer::setBrightness(uint8_t pin, float value){
 	assert(pin == 9 || pin == 10);
 
-	if (pin & 0x01 == 0x01){ // if (pin == 9){
+	if ((pin & 0x01) == 0x01){ // if (pin == 9){
 		TriacDimmer::detail::setChannelA(1 - value);
 	} else { // if (pin == 10){
 		TriacDimmer::detail::setChannelB(1 - value);
@@ -45,7 +45,7 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 float TriacDimmer::getCurrentBrightness(uint8_t pin){
 	assert(pin == 9 || pin == 10);
 	
-	if (pin & 0x01 == 0x01){ // if (pin == 9){
+	if ((pin & 0x01) == 0x01){ // if (pin == 9){
 		1 - TriacDimmer::detail::getChannelA();
 	} else { // if (pin == 10){
 		1 - TriacDimmer::detail::getChannelB();
