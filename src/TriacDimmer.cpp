@@ -85,6 +85,13 @@ ISR(TIMER1_CAPT_vect){
 	static uint16_t last_icr = 0;
 	TriacDimmer::detail::period = ICR1 - last_icr;
 	last_icr = ICR1;
+
+	if((signed)(TCNT1 - OCR1A) >= 0){
+		TCCR1C = _BV(FOC1A); //interrupt ran late, trigger match manually
+	}
+	if((signed)(TCNT1 - OCR1B) >= 0){
+		TCCR1C = _BV(FOC1B); //interrupt ran late, trigger match manually
+	}
 }
 
 
