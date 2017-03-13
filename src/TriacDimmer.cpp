@@ -46,9 +46,9 @@ float TriacDimmer::getCurrentBrightness(uint8_t pin){
 	assert(pin == 9 || pin == 10);
 	
 	if ((pin & 0x01) == 0x01){ // if (pin == 9){
-		1 - TriacDimmer::detail::getChannelA();
+		return 1 - TriacDimmer::detail::getChannelA();
 	} else { // if (pin == 10){
-		1 - TriacDimmer::detail::getChannelB();
+		return 1 - TriacDimmer::detail::getChannelB();
 	}
 }
 
