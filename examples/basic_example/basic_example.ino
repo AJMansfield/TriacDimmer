@@ -6,8 +6,8 @@
 
   This sketch is meant to be used with one of these boards, or 
   something similar:
-      http://a.co/iy2r6Gq
-      http://a.co/30mKbq8
+      https://www.amazon.com/Dimmer-Module-Controller-Arduino-Raspberry/dp/B06Y1GVG26
+      https://mdwdz.en.alibaba.com/product/60670737878-804998378/2CH_AC_LED_Light_Dimmer_Module_Controller_Board.html
 
   While this sketch is meant to be used with a dual-channel dimmer,
   it can also control just a single channel (just leave the second
