@@ -9,8 +9,9 @@ volatile uint16_t TriacDimmer::detail::ch_A_dn;
 volatile uint16_t TriacDimmer::detail::ch_B_up;
 volatile uint16_t TriacDimmer::detail::ch_B_dn;
 
-void TriacDimmer::begin(uint16_t pulse_length){
+void TriacDimmer::begin(uint16_t pulse_length, uint16_t min_trigger){
 	TriacDimmer::detail::pulse_length = pulse_length;
+	TriacDimmer::detail::min_trigger = min_trigger;
 
 	TCCR1A = 0;
 	TCCR1B = _BV(ICNC1)  //input capture noise cancel
@@ -44,7 +45,7 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 
 float TriacDimmer::getCurrentBrightness(uint8_t pin){
 	assert(pin == 9 || pin == 10);
-	
+
 	if ((pin & 0x01) == 0x01){ // if (pin == 9){
 		return 1 - TriacDimmer::detail::getChannelA();
 	} else { // if (pin == 10){
@@ -54,12 +55,13 @@ float TriacDimmer::getCurrentBrightness(uint8_t pin){
 
 void TriacDimmer::detail::setChannelA(float value){
 	TriacDimmer::detail::ch_A_up = TriacDimmer::detail::period * value;
-	TriacDimmer::detail::ch_A_dn = TriacDimmer::detail::ch_A_up + TriacDimmer::detail::pulse_length;
+	TriacDimmer::detail::ch_A_dn = constrain(TriacDimmer::detail::ch_A_up + TriacDimmer::detail::pulse_length,
+		TriacDimmer::detail::min_trigger, TriacDimmer::detail::period);
 }
-
 void TriacDimmer::detail::setChannelB(float value){
 	TriacDimmer::detail::ch_B_up = TriacDimmer::detail::period * value;
-	TriacDimmer::detail::ch_B_dn = TriacDimmer::detail::ch_B_up + TriacDimmer::detail::pulse_length;
+	TriacDimmer::detail::ch_B_dn = constrain(TriacDimmer::detail::ch_B_up + TriacDimmer::detail::pulse_length,
+		TriacDimmer::detail::min_trigger, TriacDimmer::detail::period);
 }
 float TriacDimmer::detail::getChannelA(){
 	return (float)TriacDimmer::detail::ch_A_up / TriacDimmer::detail::period;
