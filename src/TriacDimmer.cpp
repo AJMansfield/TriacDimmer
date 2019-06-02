@@ -97,7 +97,7 @@ ISR(TIMER1_CAPT_vect){
 
 ISR(TIMER1_COMPA_vect){
 	TIMSK1 &=~ _BV(OCIE1A); //disable match interrupt
-	TCCR1A |= _BV(COM1A1); //clear OC1x on compare match
+	TCCR1A &=~ _BV(COM1A0); //clear OC1x on compare match
 
 	OCR1A = ICR1 + TriacDimmer::detail::ch_A_dn;
 
@@ -109,7 +109,7 @@ ISR(TIMER1_COMPA_vect){
 
 ISR(TIMER1_COMPB_vect){
 	TIMSK1 &=~ _BV(OCIE1B); //disable match interrupt
-	TCCR1A |= _BV(COM1B1); //clear OC1x on compare match
+	TCCR1A &=~ _BV(COM1B0); //clear OC1x on compare match
 
 	OCR1B = ICR1 + TriacDimmer::detail::ch_B_dn;
 
