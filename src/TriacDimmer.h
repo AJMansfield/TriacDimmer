@@ -21,9 +21,10 @@ namespace TriacDimmer {
 	/**
 	 *	@brief	Initializes the library.
 	 *	@param	pulse_length	How long the trigger pulses should be, in half-microseconds.
+	 *	@param	min_trigger	Minimum offset for the end of the trigger pulse, to ensure triac latches.
 	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
 	 */
-	void begin(uint16_t pulse_length = 20);
+	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000);
 
 	/**
 	 *	@brief	Stops the library
@@ -87,6 +88,11 @@ namespace TriacDimmer {
 		 *	@brief	Stores the configured pulse length.
 		 */
 		extern volatile uint16_t pulse_length;
+
+		/**
+		 *	@brief	Stores the configured minimum trigger time.
+		 */
+		extern volatile uint16_t min_trigger;
 
 		/**
 		 *	@brief	Stores the channel A positive edge delay
