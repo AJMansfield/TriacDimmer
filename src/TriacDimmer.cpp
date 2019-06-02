@@ -71,7 +71,7 @@ float TriacDimmer::detail::getChannelB(){
 
 ISR(TIMER1_CAPT_vect){
 	TIMSK1 &=~ (_BV(OCIE1A) | _BV(OCIE1B)); //clear interrupts, in case they haven't run yet
-	TCCR1A &=~ (_BV(COM1A1) | _BV(COM1B1));
+	TCCR1A &=~ (_BV(COM1A0) | _BV(COM1B0));
 	TCCR1C = _BV(FOC1A) | _BV(FOC1B); //ensure outputs are properly cleared
 
 	OCR1A = ICR1 + TriacDimmer::detail::ch_A_up;
