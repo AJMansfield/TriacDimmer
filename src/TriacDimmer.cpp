@@ -3,6 +3,7 @@
 #include <assert.h>
 
 volatile uint16_t TriacDimmer::detail::pulse_length;
+volatile uint16_t TriacDimmer::detail::min_trigger;
 volatile uint16_t TriacDimmer::detail::period = 16667;
 volatile uint16_t TriacDimmer::detail::ch_A_up;
 volatile uint16_t TriacDimmer::detail::ch_A_dn;
