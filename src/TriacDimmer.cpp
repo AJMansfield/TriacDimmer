@@ -18,6 +18,7 @@ volatile uint16_t TriacDimmer::detail::ch_B_up;
 volatile uint16_t TriacDimmer::detail::ch_B_dn;
 volatile uint16_t ch_B_dn_buf;
 
+uint16_t last_icr = 0;
 volatile uint16_t TriacDimmer::detail::period = 16667;
 
 
@@ -159,8 +160,6 @@ ISR(TIMER1_CAPT_vect){
 	TIFR1 = _BV(OCF1A) | _BV(OCF1B); //clear compare match flags
 	TIMSK1 |= _BV(OCIE1A) | _BV(OCIE1B); //enable input capture and compare match interrupts
 
-
-	static uint16_t last_icr = 0;
 	TriacDimmer::detail::period = ICR1 - last_icr;
 	last_icr = ICR1;
 
@@ -177,7 +176,7 @@ ISR(TIMER1_COMPA_vect){
 	TIMSK1 &=~ _BV(OCIE1A); //disable match interrupt
 	TCCR1A &=~ _BV(COM1A0); //clear OC1x on compare match
 
-	OCR1A = ICR1 + ch_A_dn_buf;
+	OCR1A = last_icr + ch_A_dn_buf;
 
 	if((signed)(TCNT1 - OCR1A) >= 0){
 		TCCR1C = _BV(FOC1A); //interrupt ran late, trigger match manually
@@ -189,7 +188,7 @@ ISR(TIMER1_COMPB_vect){
 	TIMSK1 &=~ _BV(OCIE1B); //disable match interrupt
 	TCCR1A &=~ _BV(COM1B0); //clear OC1x on compare match
 
-	OCR1B = ICR1 + ch_B_dn_buf;
+	OCR1B = last_icr + ch_B_dn_buf;
 
 	if((signed)(TCNT1 - OCR1B) >= 0){ 
 		TCCR1C = _BV(FOC1B); //interrupt ran late, trigger match manually
