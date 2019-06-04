@@ -26,7 +26,7 @@ namespace TriacDimmer {
 	 *	@param	off_thresh	Brightness threshold where the light will be turned off completely. <0 means disabled.
 	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
 	 */
-	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000, float on_thresh = 1.0, float off_thresh = 0.01);
+	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000, float on_thresh = 2.0, float off_thresh = 0.01);
 
 	/**
 	 *	@brief	Stops the library
