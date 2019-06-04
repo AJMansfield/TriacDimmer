@@ -1,6 +1,7 @@
 #include "TriacDimmer.h"
 #include <Arduino.h>
 #include <assert.h>
+#include <util/atomic.h>
 
 volatile uint16_t TriacDimmer::detail::pulse_length;
 volatile uint16_t TriacDimmer::detail::min_trigger;
@@ -15,6 +16,7 @@ volatile uint16_t TriacDimmer::detail::ch_B_dn;
 volatile uint16_t ch_B_dn_buf;
 
 void TriacDimmer::begin(uint16_t pulse_length, uint16_t min_trigger){
+	// Don't need atomic writes since the ISRs haven't started yet.
 	TriacDimmer::detail::pulse_length = pulse_length;
 	TriacDimmer::detail::min_trigger = min_trigger;
 
@@ -59,20 +61,49 @@ float TriacDimmer::getCurrentBrightness(uint8_t pin){
 }
 
 void TriacDimmer::detail::setChannelA(float value){
-	TriacDimmer::detail::ch_A_up = TriacDimmer::detail::period * value;
-	TriacDimmer::detail::ch_A_dn = constrain(TriacDimmer::detail::ch_A_up + TriacDimmer::detail::pulse_length,
-		TriacDimmer::detail::min_trigger, TriacDimmer::detail::period);
+	uint16_t p, u, d;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		// Don't need atomic read for pulse_length or min_trigger since they're not updated from an ISR.
+		p = TriacDimmer::detail::period;
+	}
+	u = p * value;
+	d = constrain(u + TriacDimmer::detail::pulse_length, TriacDimmer::detail::min_trigger, p);
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		TriacDimmer::detail::ch_A_up = u;
+		TriacDimmer::detail::ch_A_dn = d;
+	}
 }
+
 void TriacDimmer::detail::setChannelB(float value){
-	TriacDimmer::detail::ch_B_up = TriacDimmer::detail::period * value;
-	TriacDimmer::detail::ch_B_dn = constrain(TriacDimmer::detail::ch_B_up + TriacDimmer::detail::pulse_length,
-		TriacDimmer::detail::min_trigger, TriacDimmer::detail::period);
+	uint16_t p, u, d;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		// Don't need atomic read for pulse_length or min_trigger since they're not updated from an ISR.
+		p = TriacDimmer::detail::period;
+	}
+	u = p * value;
+	d = constrain(u + TriacDimmer::detail::pulse_length, TriacDimmer::detail::min_trigger, p);
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		TriacDimmer::detail::ch_B_up = u;
+		TriacDimmer::detail::ch_B_dn = d;
+	}
 }
+
 float TriacDimmer::detail::getChannelA(){
-	return (float)TriacDimmer::detail::ch_A_up / TriacDimmer::detail::period;
+	uint16_t p, u;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		p = TriacDimmer::detail::period;
+		u = TriacDimmer::detail::ch_A_up;
+	}
+	return (float)p / u;
 }
+
 float TriacDimmer::detail::getChannelB(){
-	return (float)TriacDimmer::detail::ch_B_up / TriacDimmer::detail::period;
+	uint16_t p, u;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		p = TriacDimmer::detail::period;
+		u = TriacDimmer::detail::ch_B_up;
+	}
+	return (float)p / u;
 }
 
 
