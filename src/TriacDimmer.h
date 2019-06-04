@@ -22,11 +22,11 @@ namespace TriacDimmer {
 	 *	@brief	Initializes the library.
 	 *	@param	pulse_length	How long the trigger pulses should be, in half-microseconds.
 	 *	@param	min_trigger	Minimum offset from beginning of phase to end of trigger pulse to ensure triac latches.
-	 *	@param	on_thresh	Brightness threshold where the light will be turned on completely. Set to >1 to disable.
-	 *	@param	off_thresh	Brightness threshold where the light will be turned off completely. Set to <0 to disable.
+	 *	@param	on_thresh	Brightness threshold where the light will be turned on completely. >1 means disabled.
+	 *	@param	off_thresh	Brightness threshold where the light will be turned off completely. <0 means disabled.
 	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
 	 */
-	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000, float on_thresh = 0.98, float off_thresh = 0.02);
+	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000, float on_thresh = 1.0, float off_thresh = 0.01);
 
 	/**
 	 *	@brief	Stops the library

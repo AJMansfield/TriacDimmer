@@ -15,6 +15,7 @@ begin	KEYWORD2
 end	KEYWORD2
 setBrightness	KEYWORD2
 getCurrentBrightness	KEYWORD2
+disable	KEYWORD2
 
 ######################################
 # Constants/defines (LITERAL1)
