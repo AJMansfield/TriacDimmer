@@ -53,7 +53,7 @@ void TriacDimmer::setBrightness(uint8_t pin, float value){
 		digitalWrite(pin, HIGH);
 		TriacDimmer::disable(pin);
 	} else if (value < TriacDimmer::detail::off_thresh) {
-		digitalWrite(pin, HIGH);
+		digitalWrite(pin, LOW);
 		TriacDimmer::disable(pin);
 	} else {
 		if ((pin & 0x01) == 0x01){ // if (pin == 9){
