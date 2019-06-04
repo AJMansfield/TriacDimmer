@@ -21,8 +21,8 @@ This library was developed specifically to control a Krida 2 CH Dimmer
 See [the example](examples/basic_example/basic_example.ino) for an example of how to use the library.
 The library methods themselves are documented in [the library header](src/TriacDimmer.h).
 
-This library **requires** the use of pins 8, 9, and 10.
-Pin 8 _must_ be used as the sync input, and pins 9 and 10 _must_ be used as the channel outputs.
+This library **requires** the use of certain pins.
+Pin 8 _must_ be used as the sync input, and pins 9 and 10 are the only pins that can be used as channel outputs.
 This library _will not work_ on any other pins, period.
 
 ![fritzing diagram](fritzing.png)
