@@ -115,7 +115,7 @@ ISR(TIMER1_CAPT_vect){
 	OCR1A = ICR1 + TriacDimmer::detail::ch_A_up;
 	OCR1B = ICR1 + TriacDimmer::detail::ch_B_up;
 	ch_A_dn_buf = TriacDimmer::detail::ch_A_dn;
-	ch_B_dn_buf = TriacDimmer::detail::ch_b_dn;
+	ch_B_dn_buf = TriacDimmer::detail::ch_B_dn;
 
 	TCCR1A |= _BV(COM1A0) | _BV(COM1A1) | _BV(COM1B0) | _BV(COM1B1); //set OC1x on compare match
 	TIFR1 = _BV(OCF1A) | _BV(OCF1B); //clear compare match flags
