@@ -38,31 +38,31 @@ unsigned char channel_1 = 9; // channel 1 pin
 unsigned char channel_2 = 10; // channel 2 pin
 
 void setup() {
-  //initialize the dimmer library. We want 
+  // initialize the dimmer library.
   TriacDimmer::begin();
 }
 
 void loop() {
-  //gradually increase brightness over time
-  for(float brightness = 0.01; brightness < 0.99; brightness += 0.01){
+  // gradually increase brightness over time
+  for(float brightness = 0.00; brightness < 1.00; brightness += 0.01){
   
-    //set channel 1 to the brightness value:
+    // set channel 1 to the brightness value:
     TriacDimmer::setBrightness(channel_1, brightness); 
 
-    //invert brightness for channel 2:
+    // invert brightness for channel 2:
     TriacDimmer::setBrightness(channel_2, 1 - brightness); 
     
     delay(20);
   }
   
-  //and back down - decrease brightness over time
-  for(float brightness = 0.99; brightness > 0.01; brightness -= 0.01){
+  // and back down - decrease brightness over time
+  for(float brightness = 1.00; brightness > 0.00; brightness -= 0.01){
       
-    //set channel 1 to the brightness value:
+    // set channel 1 to the brightness value:
     TriacDimmer::setBrightness(channel_1, brightness);
 
-    //invert brightness for channel 2:
-    TriacDimmer::setBrightness(channel_2, brightness);
+    // invert brightness for channel 2:
+    TriacDimmer::setBrightness(channel_2, 1 - brightness);
     
     delay(20);
   }

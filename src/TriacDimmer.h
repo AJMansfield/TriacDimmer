@@ -21,9 +21,12 @@ namespace TriacDimmer {
 	/**
 	 *	@brief	Initializes the library.
 	 *	@param	pulse_length	How long the trigger pulses should be, in half-microseconds.
+	 *	@param	min_trigger	Minimum offset from beginning of phase to end of trigger pulse to ensure triac latches.
+	 *	@param	on_thresh	Brightness threshold where the light will be turned on completely. >1 means disabled.
+	 *	@param	off_thresh	Brightness threshold where the light will be turned off completely. <0 means disabled.
 	 *	This method initializes the library, setting up the timer and enabling the corresponding interrupts.
 	 */
-	void begin(uint16_t pulse_length = 20);
+	void begin(uint16_t pulse_length = 20, uint16_t min_trigger = 2000, float on_thresh = 2.0, float off_thresh = 0.01);
 
 	/**
 	 *	@brief	Stops the library
@@ -35,17 +38,22 @@ namespace TriacDimmer {
 	 *	@brief	Sets the current brightness.
 	 *	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
 	 *	@param	value	The desired brightness, from 0.0 to 1.0.
-	 *	This method sets the brightness for the channel controlled by the indicated pin.
-	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
+	 *	This method enables library control of the given output pin and sets the brightness.
 	 */
 	void setBrightness(uint8_t pin, float value);
 
+	/**
+	 *  @brief	Disables and detaches the pin from the library.
+	 *	@param	pin		The pin to relenquish control of.
+	 *	This method disables control of the given pin and stops the library from controlling it.
+	 *	Note that both pins start disabled; in order to enable them you can call `setBrightness`.
+	 */
+	void disable(uint8_t pin);
 
 	/**
 	 *	@brief	Gets the currently-set brightness.
 	 *	@param	pin		The pin controlling the desired channel. Only pins 9 and 10 are supported.
 	 *	This method retrieves the brightness for the channel controlled by the indicated pin.
-	 *	The constexpr version of the function is identical, but verifies that the pin is valid at compile time.
 	 */
 	float getCurrentBrightness(uint8_t pin);
 
@@ -60,6 +68,7 @@ namespace TriacDimmer {
 		 *	@brief	Sets channel A phase angle.
 		 *	@param	value	The phase angle, 0.0 fires immediately, 1.0 fires one period later.
 		 *	This method directly sets the phase angle used to control brightness on channel A (pin 9).
+		 *	Note that this method does not enable the pin if it is disabled.
 		 */
 		void setChannelA(float value);
 
@@ -67,6 +76,7 @@ namespace TriacDimmer {
 		 *	@brief	Sets channel B phase angle.
 		 *	@param	value	The phase angle, 0.0 fires immediately, 1.0 fires one period later.
 		 *	This method directly sets the phase angle used to control brightness on channel B (pin 10).
+		 *	Note that this method does not enable the pin if it is disabled.
 		 */
 		void setChannelB(float value);
 
@@ -82,11 +92,43 @@ namespace TriacDimmer {
 		 */
 		float getChannelB();
 
+		/**
+		 *	@brief	Disables channel A.
+		 *	This method disables timer control of channel A (pin 9). Set `ch_A_en` to re-enable.
+		 */
+		void disableChannelA();
+
+		/**
+		 *	@brief	Disables channel B.
+		 *	This method disables timer control of channel B (pin 10). Set `ch_A_en` to re-enable.
+		 */
+		void disableChannelB();
+
 
 		/**
 		 *	@brief	Stores the configured pulse length.
 		 */
-		extern volatile uint16_t pulse_length;
+		extern uint16_t pulse_length;
+
+		/**
+		 *	@brief	Stores the configured minimum trigger time.
+		 */
+		extern uint16_t min_trigger;
+
+		/**
+		 *	@brief	Stores the configured minimum trigger time.
+		 */
+		extern float on_thresh;
+
+		/**
+		 *	@brief	Stores the configured minimum trigger time.
+		 */
+		extern float off_thresh;
+
+		/**
+		 *	@brief	Stores whether channel A is enabled.
+		 */
+		extern volatile bool ch_A_en;
 
 		/**
 		 *	@brief	Stores the channel A positive edge delay
@@ -97,6 +139,11 @@ namespace TriacDimmer {
 		 *	@brief	Stores the channel A negative edge delay
 		 */
 		extern volatile uint16_t ch_A_dn;
+
+		/**
+		 *	@brief	Stores whether channel B is enabled.
+		 */
+		extern volatile bool ch_B_en;
 
 		/**
 		 *	@brief	Stores the channel B positive edge delay
