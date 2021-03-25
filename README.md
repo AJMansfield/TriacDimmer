@@ -1,5 +1,5 @@
 # TriacDimmer
-An arduino library for controlling a triac dimmer.
+The _high-performance_ arduino triac dimming library.
 
 This library was designed to perform phase-control dimming control on a triac dimming circuit,
   leveraging the ATmega328p's built-in timer peripheral to perform all time-critical functionality directly in hardware,
