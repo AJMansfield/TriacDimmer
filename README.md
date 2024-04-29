@@ -31,7 +31,37 @@ This library _will not work_ on any other pins, period.
 
 ## Flickering, and How to Fix It
 
-If you experience issues with flickering, there are a handful of parameters you can pass to `begin` that can be adjusted depending on what sort of flickering you have.
+If you experience issues with flickering, here are a few things you might want to consider/try:
+
+### Frequency Drift Calibration
+
+This library automatically recalibrates against frequency drift every time `setBrightness` is called, and the design decision to have the library do it this way has implications for how the library needs to be used. (A better design might make this 100% automatic in the future, though.)
+
+In order for the frequency drift calibration to work as expected, the library needs to observe a full waveform period between the initial `begin` and a `setBrightness` call. Without this, the library will assume a default calibration, but this default calibration is not going to be accurate, and is entirely wrong for any situation other than a 16MHz arduino controlling 60Hz power.
+
+Ensuring you have a valid drift calibration _could_ mean something as simplistic as sleeping for 20ms between `TriacDimmer::begin` and `TriacDimmer::setBrightness`, but in practice it's easier to just have one of your main loop tasks be calling `setBrightness` -- that way it will continuously compensate for temperature changes too.
+
+### Signal Noise
+
+When working with power electronics, it always pays to be paranoid about signal noise.
+
+This library automatically enables the integrated noise-filtering function of the hardware it uses to help reduce the impact of noise on the sync input -- but this can only do so much.
+
+More filtering can be added by wiring a small capacitor (e.g. 1nF) between the sync signal and ground, close to the arduino board; or an even more advanced low-pass RC filter for those willing to do the math.
+
+In addition, you should also look at ways to reduce the nose at its source instead of just filtering it out after the fact.
+
+You may not need to be quite as paranoid as doing everything described here -- in fact, you most definitely should not do the last item -- but if it's not working yet...
+
+- Keep low voltage and high voltage wires as separate as you can manage, and make sure they are not parallel with each other.
+- Minimize loop area. Run the neutral wire for the circut backwards along the exact same path and as close as your insulation clearances allow to the hot wire, so that any magnetic fields from current in one wire are cancelled out by the return current in the other.
+- Add shielding. If low voltage and high voltage ever do need to be close or parallel, ensure at least one of the two is covered as much as you can manage with some sort of grounded metal -- whether that's a metal box around one of the two sections, a bot of copper foil tape wrapped around a bundle of wires, or whatever else you need.
+- Realize that single-ended signals are a lie we tell beginners and car mechanics -- everything is differential, _how_ differential jut depends on frequency. Run a twisted pair for each signal and use the other conductor in each pair as a dedicated signal return connected to the closest ground at each end.
+- Abandon all hope and confront your imposter syndrome by adding "real" differential transcievers.
+
+### Tune the Pulse Generation Parameters
+
+There are a handful of parameters you can pass to `begin` that can be adjusted depending on what sort of flickering you have.
 By default, with no arguments the library uses these values as defaults:
 
 ```cpp
@@ -47,10 +77,11 @@ If you're still experiencing flickering no matter how large `min_trigger` is, yo
 The last step is to figure out the lowest brightness value can sustain without flickering. 
 By default the library is set to cut off completely for brightness values smaller than `0.01`, but if you still see flickering at `0.015` or `0.02` you can try setting `off_thresh` to a value that's larger than that.
 
-If you've tried all of these steps and you still get flickering, consider opening an issue.
-Make sure to include as much information about your setup as you can, including the specific dimmer board you're using.
-Also, if you have access to an oscilliscope, screenshots are always helpful in trying to diagnose flickering.
+### Open an Issue
 
+If you've tried some or all of these things and still get flickering, consider opening an issue.
+Make sure to include as much information about your setup as you can, including the specific dimmer board you're using and the code you are using to drive it.
+If you have access to an oscilliscope, please include screenshots (or if you must, phone pictures of the screen), showing the mains voltage input, the mains voltage output, and the arduino's sync input and trigger output pins at the arduino. (If you only have two channels rather than four, the most important two signals to examine are the sync input and the mains voltage output.)
 
 ## Theory of Operation
 
